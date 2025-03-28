@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+.tmp/
+
+package-lock.json
+node_modules/
+
+tsconfig.build.json
+
+dist/
+*.env
+#El * es para que ignore todos los archivos con ese nombre.

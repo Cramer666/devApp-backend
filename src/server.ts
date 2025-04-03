@@ -5,6 +5,8 @@ import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import process from 'process';
 import { personas } from './interfaces/lista';
+import { findPersonaById } from './services/const';
+import { dataBasic } from './services/const';
 
 // Creamos nuestra app express
 const app = express();
@@ -17,7 +19,7 @@ app.use(cors());
 app.use(helmet());
 app.use(bodyParser.json());
 
-// Mis endpoints van acá
+// Mis endpoints van acá ponele...
 // ...
 app.get('/', (req, res) => {
     console.log(req);
@@ -30,24 +32,22 @@ app.get('/personas', (req, res) => {
 });
 
 app.get('/browse', (req, res) => {
-    const resultado = personas.map((persona) => ({
-        DNI: persona.DNI,
-        nombre: persona.nombre,
-        apellido: persona.apellido,
-    }));
+    const resultado = dataBasic();
     console.log(req);
     res.json(resultado);
 });
 
 app.get('/read/:id', (req, res) => {
     const { id } = req.params;
-    const personaList = personas.find((p) => p.id == Number(id));
-    if (!personaList) {
+    const personasById = findPersonaById(Number(id));
+    if (!personasById) {
         res.status(404).json({ error: 'La persona que buscas no existe, 404 bro!' });
     } else {
-        res.json(personaList);
+        res.json(personasById);
     }
 });
+
+//app.put('/edit/:id', (req, res) => {});
 
 app.post('/login', (req, res) => {
     console.log(req.body);

@@ -5,8 +5,7 @@ import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import process from 'process';
 import { personas } from './interfaces/lista';
-import { findPersonaById } from './services/const';
-import { dataBasic } from './services/const';
+import { findPersonaById, dataBasic, editById } from './services/const';
 
 // Creamos nuestra app express
 const app = express();
@@ -47,7 +46,19 @@ app.get('/read/:id', (req, res) => {
     }
 });
 
-//app.put('/edit/:id', (req, res) => {});
+app.put('/edit/:id', (req, res) => {
+    const { id } = req.params;
+    const infoPersona = req.body;
+    const personasById = findPersonaById(Number(id));
+    if (personasById) {
+        res.status(201).json(infoPersona);
+        editById(Number(id));
+    } else if (!personasById) {
+        res.status(404).json({ error: 'El ID es incorrecto o no se encuentra' });
+    } else {
+        res.status(400).json({ error: 'Argumentos incorrectos' });
+    }
+});
 
 app.post('/login', (req, res) => {
     console.log(req.body);

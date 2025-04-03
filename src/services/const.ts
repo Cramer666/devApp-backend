@@ -12,4 +12,4 @@ export const dataBasic = () => {
     }));
 };
 
-//export const editById = (id: number) => {};
+export const editById = (id: number) => {};

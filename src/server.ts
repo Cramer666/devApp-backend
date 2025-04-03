@@ -4,7 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import process from 'process';
-import personas from './interfaces/lista';
+import { personas } from './interfaces/lista';
 
 // Creamos nuestra app express
 const app = express();
@@ -27,6 +27,26 @@ app.get('/', (req, res) => {
 app.get('/personas', (req, res) => {
     console.log(req);
     res.json(personas);
+});
+
+app.get('/browse', (req, res) => {
+    const resultado = personas.map((persona) => ({
+        DNI: persona.DNI,
+        nombre: persona.nombre,
+        apellido: persona.apellido,
+    }));
+    console.log(req);
+    res.json(resultado);
+});
+
+app.get('/read/:id', (req, res) => {
+    const { id } = req.params;
+    const personaList = personas.find((p) => p.id == Number(id));
+    if (!personaList) {
+        res.status(404).json({ error: 'La persona que buscas no existe, 404 bro!' });
+    } else {
+        res.json(personaList);
+    }
 });
 
 app.post('/login', (req, res) => {

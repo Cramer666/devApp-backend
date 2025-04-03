@@ -8,4 +8,5 @@ export interface Auto {
     color: string;
     nroDeChasis: string;
     motor: string;
+    duenio: Persona['id'];
 }

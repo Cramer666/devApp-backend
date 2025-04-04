@@ -49,11 +49,10 @@ app.get('/read/:id', (req, res) => {
 app.put('/edit/:id', (req, res) => {
     const { id } = req.params;
     const infoPersona = req.body;
-    const personasById = findPersonaById(Number(id));
-    if (personasById) {
-        res.status(201).json(infoPersona);
-        editById(Number(id));
-    } else if (!personasById) {
+    const personaActualizada = editById(Number(id), infoPersona);
+    if (personaActualizada) {
+        res.status(201).json(personaActualizada);
+    } else if (!personaActualizada) {
         res.status(404).json({ error: 'El ID es incorrecto o no se encuentra' });
     } else {
         res.status(400).json({ error: 'Argumentos incorrectos' });

@@ -1,5 +1,5 @@
-import { personas } from '../interfaces/lista';
-import { Persona } from '../interfaces/persona';
+import { personas } from '../repositories/lista';
+import { Persona } from '../models/persona';
 
 export const findPersonaById = (id: number) => {
     return personas.find((p) => p.id === id);
@@ -12,18 +12,29 @@ export const dataBasic = () => {
         apellido: persona.apellido,
     }));
 };
-/*SE PUEDE IR A FREIR CHURROS EL PUT Y LA PTMQLP!*/
-export const editById = (id: number, datosNuevos: Partial<Persona>) => {
-    const persona = findPersonaById(id);
-    const camposValidos = [persona?.nombre];
-    if (!persona) {
-        return null;
-    }
-    for (const campo in datosNuevos) {
-        if (!camposValidos.includes(campo)) {
-            return 'Error: Hay campos inválidos en la solicitud';
-        }
-    }
-    Object.assign(persona, datosNuevos);
-    return persona;
+
+const dataFull = (persona: Partial<Persona>): boolean => {
+    return (
+        typeof persona.nombre === 'string' ||
+        typeof persona.apellido === 'string' ||
+        typeof persona.DNI === 'string' ||
+        typeof persona.fechaDeNacimiento === 'string' ||
+        typeof persona.genero === 'string' ||
+        typeof persona.donante === 'boolean'
+    );
 };
+/*SE PUEDE IR A FREIR CHURROS EL PUT Y LA PTMQLP!*/
+ export const editById = (id: number, datosNuevos: Partial<Persona>) => {
+    const personaID = findPersonaById(id);
+    const personaActualizada = personaID;
+
+    if (!personaID) {
+        return null;
+    } else if (!dataFull(datosNuevos)) {
+        return false;
+    }
+    Object.assign(personaID, datosNuevos);
+
+    return personaActualizada;
+};
+

@@ -4,7 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import process from 'process';
-import { personas } from './interfaces/lista';
+import { personas } from './repositories/lista';
 import { findPersonaById, dataBasic, editById } from './services/const';
 
 // Creamos nuestra app express
@@ -50,12 +50,12 @@ app.put('/edit/:id', (req, res) => {
     const { id } = req.params;
     const infoPersona = req.body;
     const personaActualizada = editById(Number(id), infoPersona);
-    if (personaActualizada) {
-        res.status(201).json(personaActualizada);
-    } else if (!personaActualizada) {
+    if (personaActualizada === false) {
+        res.status(400).json({ error: 'Argumentos incorrectos' });
+    } else if (personaActualizada === null) {
         res.status(404).json({ error: 'El ID es incorrecto o no se encuentra' });
     } else {
-        res.status(400).json({ error: 'Argumentos incorrectos' });
+        res.status(201).json(personaActualizada);
     }
 });
 

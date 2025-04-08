@@ -1,5 +1,5 @@
-import { Persona } from './persona';
-import { Genero } from './genero';
+import { Persona } from '../models/persona';
+import { Genero } from '../models/genero';
 
 const lucia: Persona = {
     id: 1,

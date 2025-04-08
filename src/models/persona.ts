@@ -1,5 +1,5 @@
-import { Auto } from './auto';
-import { Genero } from './genero';
+import { Auto } from '../models/auto';
+import { Genero } from '../models/genero';
 
 export interface Persona {
     /*Si le pones un ? es optativo el campo */

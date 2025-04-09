@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import process from 'process';
 import { personas } from './repositories/lista';
-import { findPersonaById, dataBasic, editById, addEntity } from './services/const';
+import { findPersonaById, dataBasic, editById, addEntity, deleteByID } from './services/const';
 import { error } from 'console';
 
 // Creamos nuestra app express
@@ -70,7 +70,18 @@ app.post('/add', (req, res) => {
     res.status(200).json({ id: nuevoId });
 
 
-})
+});
+
+app.delete('/delete/:id',(req, res) => {
+    const { id } = req.params;
+    const fueEliminada = deleteByID(Number(id));
+
+    if(fueEliminada === false){
+        res.status(404).json({error: 'ID incorrecto'})
+    }else{
+        res.status(201).json('Persona eliminada correctamente');
+    }
+});
 
 app.post('/login', (req, res) => {
     console.log(req.body);
@@ -81,3 +92,5 @@ app.post('/login', (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
+
+

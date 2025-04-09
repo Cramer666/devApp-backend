@@ -73,5 +73,18 @@ export const addEntity =(entidad : any) => {
     const nuevaPersona = crearPersona(entidad);
     personas.push(nuevaPersona);
     return nuevaPersona.id;
+};
+
+const findIndexById=(id : number) => {
+    return personas.findIndex(p => p.id === id);
+}
+
+export const deleteByID = (id : number): boolean => {
+    const personaID = findIndexById(id); //si no da esta ponele es -1
+    if (personaID === -1) {
+        return false;
+    }
+    personas.splice(personaID);
+    return true;
 }
 

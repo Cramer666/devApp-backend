@@ -1,5 +1,22 @@
-import { personas } from '../repositories/lista';
+import { asignarID, personas } from '../repositories/lista';
 import { Persona } from '../models/persona';
+
+
+
+
+export const crearPersona = (persona: Partial<Persona>): Persona => {
+    //el ! no es lo mas seguro pero ña, tendria q validar
+    return {
+        id: asignarID(),
+        nombre: persona.nombre!,
+        apellido: persona.apellido!,
+        DNI: persona.DNI!,
+        fechaDeNacimiento: persona.fechaDeNacimiento!,
+        genero: persona.genero!,
+        donante: persona.donante!,
+        vehiculo: persona.vehiculo!
+    };
+};
 
 export const findPersonaById = (id: number) => {
     return personas.find((p) => p.id === id);
@@ -23,7 +40,18 @@ const dataFull = (persona: Partial<Persona>): boolean => {
         typeof persona.donante === 'boolean'
     );
 };
-/*SE PUEDE IR A FREIR CHURROS EL PUT Y LA PTMQLP!*/
+
+const validarPersona = (persona: Partial<Persona>): boolean => {
+    return (
+        typeof persona.nombre === 'string' &&
+        typeof persona.apellido === 'string' &&
+        typeof persona.DNI === 'string' &&
+        typeof persona.fechaDeNacimiento === 'string' &&
+        typeof persona.genero === 'string' &&
+        typeof persona.donante === 'boolean'
+    );
+};
+
  export const editById = (id: number, datosNuevos: Partial<Persona>) => {
     const personaID = findPersonaById(id);
     const personaActualizada = personaID;
@@ -37,4 +65,13 @@ const dataFull = (persona: Partial<Persona>): boolean => {
 
     return personaActualizada;
 };
+
+export const addEntity =(entidad : any) => {
+
+    if (!validarPersona(entidad)) throw new Error();
+
+    const nuevaPersona = crearPersona(entidad);
+    personas.push(nuevaPersona);
+    return nuevaPersona.id;
+}
 

@@ -1,8 +1,13 @@
 import { Persona } from '../models/persona';
 import { Genero } from '../models/genero';
 
+let idCounter = 1;
+export const asignarID = (): number =>{
+    return idCounter++;
+}
+
 const lucia: Persona = {
-    id: 1,
+    id: asignarID(),
     nombre: 'Lucia',
     apellido: 'Perrone',
     DNI: '35.219.427',
@@ -13,7 +18,7 @@ const lucia: Persona = {
 };
 
 const ezequiel: Persona = {
-    id: 2,
+    id: asignarID(),
     nombre: 'Ezequiel',
     apellido: 'Rumiano',
     DNI: 'null',

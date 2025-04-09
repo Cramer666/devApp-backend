@@ -1,4 +1,4 @@
-import { Persona } from '../interfaces/persona';
+import { Persona } from '../models/persona';
 
 export interface Auto {
     marca: string;

@@ -5,7 +5,8 @@ import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import process from 'process';
 import { personas } from './repositories/lista';
-import { findPersonaById, dataBasic, editById } from './services/const';
+import { findPersonaById, dataBasic, editById, addEntity } from './services/const';
+import { error } from 'console';
 
 // Creamos nuestra app express
 const app = express();
@@ -58,6 +59,18 @@ app.put('/edit/:id', (req, res) => {
         res.status(201).json(personaActualizada);
     }
 });
+
+app.post('/add', (req, res) => {
+    const infoEntidad = req.body;
+    if (addEntity === error){
+     res.status(400).json({ error: 'Los datos enviados son incorrectos o incompletos' });
+    }
+
+    const nuevoId = addEntity(infoEntidad);
+    res.status(200).json({ id: nuevoId });
+
+
+})
 
 app.post('/login', (req, res) => {
     console.log(req.body);

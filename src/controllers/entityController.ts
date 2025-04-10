@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { personaReposiyory } from '../repositories/personaRepository';
+import { personaRepository } from '../repositories/personaRepository';
 import { autoRepository } from '../repositories/autoRepository';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const repos: Record<string, any> = {
-    persona: personaReposiyory,
+    persona: personaRepository,
     auto: autoRepository,
 };
 

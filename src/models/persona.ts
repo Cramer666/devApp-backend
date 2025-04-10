@@ -1,5 +1,6 @@
 import { Auto } from '../models/auto';
-import { Genero } from '../models/genero';
+
+type Genero = 'Maculino' | 'Femenino' | 'No binario';
 
 export interface Persona {
     /*Si le pones un ? es optativo el campo */

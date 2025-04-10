@@ -1,6 +1,5 @@
-import { Persona } from '../models/persona';
-
 export interface Auto {
+    id: number;
     marca: string;
     modelo: string;
     anio: number;
@@ -8,5 +7,5 @@ export interface Auto {
     color: string;
     nroDeChasis: string;
     motor: string;
-    duenio: Persona['id'];
+    duenio: number;
 }

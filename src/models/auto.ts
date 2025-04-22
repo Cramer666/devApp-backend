@@ -1,5 +1,6 @@
-export interface Auto {
-    id: number;
+import { index } from '.';
+
+export interface Auto extends index {
     marca: string;
     modelo: string;
     anio: number;
@@ -7,5 +8,5 @@ export interface Auto {
     color: string;
     nroDeChasis: string;
     motor: string;
-    duenio: number;
+    duenioId: string;
 }

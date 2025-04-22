@@ -1,11 +1,11 @@
+import { index } from '.';
 import { Auto } from '../models/auto';
 
 type Genero = 'Masculino' | 'Femenino' | 'No binario';
 
-export interface Persona {
+export interface Persona extends index {
     /*Si le pones un ? es optativo el campo */
     /*Leer sobre tipos de typescript*/
-    id: number;
     nombre: string;
     apellido: string;
     DNI: string;

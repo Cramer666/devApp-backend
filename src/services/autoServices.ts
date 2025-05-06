@@ -1,11 +1,21 @@
 import { AutoRepository } from '../repositories/autoRepository';
 import { Auto } from '../models/auto';
+import { PersonaRepository } from '../repositories/personaRepository';
 
 export class AutoService {
     private repository = new AutoRepository();
+    private personaRepo = new PersonaRepository();
 
     getAll() {
-        return this.repository.getAll();
+        const autos = this.repository.getAll();
+
+        return autos.map((auto) => {
+            const persona = this.personaRepo.getById(auto.duenioId);
+            return {
+                ...auto,
+                duenio: persona ? `${persona.nombre} ${persona.apellido}` : 'Sin dueño',
+            };
+        });
     }
 
     getById(id: string) {

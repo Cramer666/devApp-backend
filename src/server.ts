@@ -3,6 +3,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import router from './routes/indexRoutes';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const port = 3000;

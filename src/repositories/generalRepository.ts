@@ -35,9 +35,9 @@ export abstract class generalRepository<T extends index> {
     }
 
     delete(id: string): boolean {
-        const initialLength = this.data.length;
+        const iTamanio = this.data.length;
         this.data = this.data.filter((item) => item.id !== id);
-        return this.data.length !== initialLength;
+        return this.data.length !== iTamanio;
     }
 
     // Generador de IDs by S.O

@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --format stylish --color --fix",
-    "start": "tsc && dotenvx run node dist/server.js",
+    "start": "tsc && node -r dotenv/config dist/server.js",
     "build": "tsc"
   },
   "author": "",
@@ -13,13 +13,22 @@
   "description": "El backend de la app",
   "devDependencies": {
     "@eslint/js": "^9.23.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/helmet": "^0.0.48",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.5",
     "globals": "^16.0.0",
     "prettier": "^3.5.3",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.28.0",
-    "tsx":"^4.19.3"
+    "typescript-eslint": "^8.28.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0"
   }
 }

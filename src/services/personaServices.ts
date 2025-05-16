@@ -12,6 +12,15 @@ export class PersonaService {
         return this.repository.getById(id);
     }
 
+    getNombreApellidoById(id: string): { nombre: string; apellido: string } | undefined {
+        const persona = this.repository.getById(id);
+        if (!persona) return undefined;
+        return {
+            nombre: persona.nombre,
+            apellido: persona.apellido,
+        };
+    }
+
     create(persona: Omit<Persona, 'id'>) {
         return this.repository.create(persona);
     }

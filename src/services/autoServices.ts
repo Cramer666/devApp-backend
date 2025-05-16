@@ -1,48 +1,62 @@
-import { AutoRepository } from '../repositories/autoRepository';
 import { Auto } from '../models/auto';
+import { AutoRepository } from '../repositories/autoRepository';
 import { PersonaRepository } from '../repositories/personaRepository';
 
 export class AutoService {
-    private repository = new AutoRepository();
-    private personaRepo = new PersonaRepository();
+    constructor(
+        private autoRepo: AutoRepository,
+        private personaRepo: PersonaRepository,
+    ) {}
 
     getAll() {
-        const autos = this.repository.getAll();
+        return this.autoRepo.getAll();
+    }
 
+    getById(id: string) {
+        return this.autoRepo.getById(id);
+    }
+
+    getAllWithOwnerNames() {
+        const autos = this.autoRepo.getAll();
         return autos.map((auto) => {
-            const persona = this.personaRepo.getById(auto.duenioId);
+            if (!auto.duenioId) {
+                return {
+                    ...auto,
+                    nombreDuenio: 'Sin dueño',
+                    apellidoDuenio: '',
+                };
+            }
+
+            const duenio = this.personaRepo.getById(auto.duenioId);
             return {
                 ...auto,
-                duenio: persona ? `${persona.nombre} ${persona.apellido}` : 'Sin dueño',
+                nombreDuenio: duenio?.nombre || 'Desconocido',
+                apellidoDuenio: duenio?.apellido || '',
             };
         });
     }
 
-    getById(id: string) {
-        return this.repository.getById(id);
-    }
-
     create(auto: Omit<Auto, 'id'>) {
-        return this.repository.create(auto);
+        return this.autoRepo.create(auto);
     }
 
     update(id: string, updates: Partial<Auto>) {
-        return this.repository.update(id, updates);
+        return this.autoRepo.update(id, updates);
     }
 
     delete(id: string) {
-        return this.repository.delete(id);
+        return this.autoRepo.delete(id);
     }
 
     findByPatente(patente: string) {
-        return this.repository.findByPatente(patente);
+        return this.autoRepo.findByPatente(patente);
     }
 
     findByDueño(dueñoId: string) {
-        return this.repository.findByDuenio(dueñoId);
+        return this.autoRepo.findByDuenio(dueñoId);
     }
 
     browse() {
-        return this.repository.browse();
+        return this.autoRepo.browse();
     }
 }

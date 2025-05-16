@@ -1,5 +1,4 @@
 import { Auto } from '../models/auto';
-//import { breadService } from '../services/breadService';
 import { generalRepository } from './generalRepository';
 
 export class AutoRepository extends generalRepository<Auto> {
@@ -7,8 +6,8 @@ export class AutoRepository extends generalRepository<Auto> {
         return this.data.find((a) => a.patente === patente);
     }
 
-    findByDuenio(dueñoId: string): Auto[] {
-        return this.data.filter((a) => a.duenioId === dueñoId);
+    findByDuenio(duenioId: string): Auto[] {
+        return this.data.filter((a) => a.duenioId === duenioId);
     }
     //Segun el enunciado este tiene q ser particular para cada entidad.
     browse() {

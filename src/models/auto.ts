@@ -8,5 +8,5 @@ export interface Auto extends index {
     color: string;
     nroDeChasis: string;
     motor: string;
-    duenioId: string;
+    duenioId: string | null;
 }

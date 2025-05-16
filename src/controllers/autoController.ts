@@ -20,6 +20,17 @@ export class AutoController {
         }
     };
 
+    getAllWithOwners = (req: Request, res: Response) => {
+        const autos = this.service.getAllWithOwnerNames().map((auto) => ({
+            ...auto,
+            duenio: {
+                nombre: auto.nombreDuenio,
+                apellido: auto.apellidoDuenio,
+            },
+        }));
+        res.json(autos);
+    };
+
     create = (req: Request, res: Response) => {
         const newAuto = this.service.create(req.body);
         res.status(201).json(newAuto);

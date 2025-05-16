@@ -15,6 +15,15 @@ export class PersonaController {
         }
         res.json(persona);
     };
+
+    getNombreApellidoById = (req: Request, res: Response) => {
+        const datos = this.service.getNombreApellidoById(req.params.id);
+        if (!datos) {
+            res.status(404).json({ error: 'Persona no encontrada' });
+        }
+        res.json(datos);
+    };
+
     create = (req: Request, res: Response) => {
         const newPersona = this.service.create(req.body);
         res.status(201).json(newPersona);

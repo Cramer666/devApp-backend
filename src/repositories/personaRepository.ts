@@ -6,4 +6,8 @@ export class PersonaRepository extends generalRepository<Persona> {
     browse() {
         return this.data.map(({ id, nombre, apellido }) => ({ id, nombre, apellido }));
     }
+
+    exists(item: Omit<Persona, 'id'>): boolean {
+        return this.data.some((persona) => persona.DNI === item.DNI);
+    }
 }

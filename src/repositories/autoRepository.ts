@@ -13,4 +13,8 @@ export class AutoRepository extends generalRepository<Auto> {
     browse() {
         return this.data.map(({ id, marca, modelo, patente }) => ({ id, marca, modelo, patente }));
     }
+
+    exists(item: Omit<Auto, 'id'>): boolean {
+        return this.data.some((auto) => auto.patente === item.patente || auto.nroDeChasis === item.nroDeChasis);
+    }
 }

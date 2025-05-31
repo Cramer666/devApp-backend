@@ -3,6 +3,8 @@ import { index } from '../models';
 export abstract class generalRepository<T extends index> {
     protected data: T[] = [];
 
+    protected abstract exists(item: Omit<T, 'id'>): boolean;
+
     getAll(): T[] {
         return [...this.data];
     }
@@ -11,7 +13,11 @@ export abstract class generalRepository<T extends index> {
         return this.data.find((item) => item.id === id);
     }
 
-    create(item: Omit<T, 'id'>): T {
+    create(item: Omit<T, 'id'>): T | { error: string } {
+        if (this.exists(item)) {
+            return { error: 'Ya existe un registro con estos datos' };
+        }
+
         const newItem = {
             ...item,
             id: this.generateId(),
@@ -25,9 +31,14 @@ export abstract class generalRepository<T extends index> {
         const index = this.data.findIndex((item) => item.id === id);
         if (index === -1) return undefined;
 
+        const potentialDuplicate = { ...this.data[index], ...updates };
+        if (this.exists(potentialDuplicate as Omit<T, 'id'>)) {
+            throw new Error('No se puede actualizar: ya existe un registro con estos datos');
+        }
+
         const updatedItem = {
             ...this.data[index],
-            ...updates, // Aplica las actualizaciones
+            ...updates,
         };
 
         this.data[index] = updatedItem;
@@ -35,9 +46,9 @@ export abstract class generalRepository<T extends index> {
     }
 
     delete(id: string): boolean {
-        const iTamanio = this.data.length;
+        const initialLength = this.data.length;
         this.data = this.data.filter((item) => item.id !== id);
-        return this.data.length !== iTamanio;
+        return this.data.length !== initialLength;
     }
 
     // Generador de IDs by S.O

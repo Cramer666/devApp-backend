@@ -20,9 +20,12 @@ export class PersonaService {
             apellido: persona.apellido,
         };
     }
-
-    create(persona: Omit<Persona, 'id'>) {
-        return this.repository.create(persona);
+    create(personaData: Omit<Persona, 'id'>) {
+        const existe = this.repository.getAll().some((p) => p.DNI === personaData.DNI);
+        if (existe) {
+            throw new Error('DNI duplicado');
+        }
+        return this.repository.create(personaData);
     }
 
     update(id: string, updates: Partial<Persona>) {

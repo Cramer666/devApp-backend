@@ -36,8 +36,19 @@ export class AutoService {
         });
     }
 
-    create(auto: Omit<Auto, 'id'>) {
-        return this.autoRepo.create(auto);
+    create(autoData: Omit<Auto, 'id'>) {
+        if (!autoData.patente || !autoData.nroDeChasis) {
+            throw new Error('Patente y número de chasis son obligatorios');
+        }
+
+        const autos = this.autoRepo.getAll();
+        const patenteExiste = autos.some((a) => a.patente === autoData.patente);
+        if (patenteExiste) throw new Error('La patente ya está registrada');
+
+        const chasisExiste = autos.some((a) => a.nroDeChasis === autoData.nroDeChasis);
+        if (chasisExiste) throw new Error('El número de chasis ya existe');
+
+        return this.autoRepo.create(autoData);
     }
 
     update(id: string, updates: Partial<Auto>) {

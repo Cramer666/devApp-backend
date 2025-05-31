@@ -32,8 +32,14 @@ export class AutoController {
     };
 
     create = (req: Request, res: Response) => {
-        const newAuto = this.service.create(req.body);
-        res.status(201).json(newAuto);
+        try {
+            const result = this.service.create(req.body);
+            res.status(201).json(result);
+        } catch (error) {
+            res.status(400).json({
+                error: error instanceof Error ? error.message : 'Error al crear auto',
+            });
+        }
     };
 
     update = async (req: Request, res: Response) => {
@@ -70,9 +76,6 @@ export class AutoController {
         } catch {
             res.status(500).json({ error: 'Error interno del servidor' });
         }
-    };
-    getByDueño = (req: Request, res: Response) => {
-        res.json(this.service.findByDueño(req.params.dueñoId));
     };
 
     browse = (req: Request, res: Response) => {

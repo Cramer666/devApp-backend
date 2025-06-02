@@ -43,12 +43,25 @@ export class AutoService {
 
         const autos = this.autoRepo.getAll();
         const patenteExiste = autos.some((a) => a.patente === autoData.patente);
-        if (patenteExiste) throw new Error('La patente ya está registrada');
+        if (patenteExiste) throw new Error('La patente ya esta registrada');
 
         const chasisExiste = autos.some((a) => a.nroDeChasis === autoData.nroDeChasis);
-        if (chasisExiste) throw new Error('El número de chasis ya existe');
+        if (chasisExiste) throw new Error('El numero de chasis ya existe');
 
-        return this.autoRepo.create(autoData);
+        const nuevoAuto = this.autoRepo.create(autoData);
+
+        if ('error' in nuevoAuto) {
+            throw new Error(nuevoAuto.error);
+        }
+
+        if (nuevoAuto.duenioId) {
+            const persona = this.personaRepo.getById(nuevoAuto.duenioId);
+            if (persona) {
+                persona.vehiculo.push(nuevoAuto);
+            }
+        }
+
+        return nuevoAuto;
     }
 
     update(id: string, updates: Partial<Auto>) {

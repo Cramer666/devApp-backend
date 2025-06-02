@@ -12,7 +12,7 @@ export class PersonaController {
     getById = (req: Request, res: Response) => {
         const result = this.service.getById(req.params.id);
         if (!result) {
-            return res.status(404).json({ error: 'No encontrado' });
+            res.status(404).json({ error: 'No encontrado' });
         }
         res.json(result);
     };
@@ -29,7 +29,7 @@ export class PersonaController {
     update = (req: Request, res: Response) => {
         const result = this.service.update(req.params.id, req.body);
         if (!result) {
-            return res.status(404).json({ error: 'No encontrado' });
+            res.status(404).json({ error: 'No encontrado' });
         }
         res.json(result);
     };
@@ -37,7 +37,7 @@ export class PersonaController {
     delete = (req: Request, res: Response) => {
         const success = this.service.delete(req.params.id);
         if (!success) {
-            return res.status(404).json({ error: 'No encontrado' });
+            res.status(404).json({ error: 'No encontrado' });
         }
         res.json({ message: 'Eliminado correctamente' });
     };
@@ -45,7 +45,7 @@ export class PersonaController {
     getNombreApellidoById = (req: Request, res: Response) => {
         const result = this.service.getNombreApellidoById(req.params.id);
         if (!result) {
-            return res.status(404).json({ error: 'No encontrado' });
+            res.status(404).json({ error: 'No encontrado' });
         }
         res.json(result);
     };

@@ -1,84 +1,53 @@
 import { Request, Response } from 'express';
 import { AutoService } from '../services/autoServices';
+import {pasarAModelo} from '../dtos/autoDto';
+
 
 export class AutoController {
+
     constructor(private service: AutoService) {}
 
-    getAll = (req: Request, res: Response) => {
-        res.json(this.service.getAll());
+    getAll = async (req: Request, res: Response) => {
+        const autos = await this.service.getAll();
+        res.json(autos);
+
     };
+
 
     getById = async (req: Request, res: Response) => {
+        const auto = await this.service.getById(req.params.id);
+
+        if (!auto) res.status(404).json({ error: 'Auto no encontrado' });
+        res.json(auto);
+
+    };
+
+
+
+    create = async (req: Request, res: Response) => {
         try {
-            const auto = await this.service.getById(req.params.id);
-            if (!auto) {
-                res.status(404).json({ error: 'Auto no encontrado' });
-            }
-            res.status(200).json(auto);
+            const autoDto= req.body;
+            const auto= pasarAModelo(autoDto);
+            const nuevoAuto = this.service.create(auto);
+            res.status(201).json(nuevoAuto);
         } catch {
-            res.status(500).json({ error: 'Error interno del servidor' });
+            res.status(400).json({ error: 'Error al crear auto' });
         }
     };
 
-    getAllWithOwners = (req: Request, res: Response) => {
-        const autos = this.service.getAllWithOwnerNames().map((auto) => ({
-            ...auto,
-            duenio: {
-                nombre: auto.nombreDuenio,
-                apellido: auto.apellidoDuenio,
-            },
-        }));
-        res.json(autos);
-    };
-
-    create = (req: Request, res: Response) => {
-        try {
-            const result = this.service.create(req.body);
-            res.status(201).json(result);
-        } catch (error) {
-            res.status(400).json({
-                error: error instanceof Error ? error.message : 'Error al crear auto',
-            });
-        }
-    };
 
     update = async (req: Request, res: Response) => {
-        try {
-            const updatedAuto = await this.service.update(req.params.id, req.body);
-            if (!updatedAuto) {
-                res.status(404).json({ error: 'Auto no encontrado' });
-            }
-            res.status(200).json(updatedAuto);
-        } catch {
-            res.status(400).json({ error: 'Pasaron cosas...' });
-        }
+        const autoActualizado = await this.service.update(req.params.id, req.body);
+        if (!autoActualizado) res.status(404).json({ error: 'Auto no encontrado' });
+        res.json(autoActualizado);
     };
+
 
     delete = async (req: Request, res: Response) => {
-        try {
-            const isDeleted = await this.service.delete(req.params.id);
-            if (!isDeleted) {
-                res.status(404).json({ error: 'Auto no encontrado' });
-            }
-            res.status(204).send();
-        } catch {
-            res.status(500).json({ error: 'Error interno del servidor' });
-        }
+        const autoEliminado = await this.service.delete(req.params.id);
+        if (!autoEliminado) res.status(404).json({ error: 'Auto no encontrado' });
+        res.status(204).end();
     };
 
-    getByPatente = async (req: Request, res: Response) => {
-        try {
-            const auto = await this.service.findByPatente(req.params.patente);
-            if (!auto) {
-                res.status(404).json({ error: 'Auto no encontrado' });
-            }
-            res.status(200).json(auto);
-        } catch {
-            res.status(500).json({ error: 'Error interno del servidor' });
-        }
-    };
-
-    browse = (req: Request, res: Response) => {
-        res.json(this.service.browse());
-    };
 }
+

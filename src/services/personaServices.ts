@@ -1,42 +1,30 @@
-import { PersonaRepository } from '../repositories/personaRepository';
+import { PersonaModel } from '../models/persona';
+import { PersonaDto } from '../dtos/personaDto';
 import { Persona } from '../models/persona';
 
 export class PersonaService {
-    constructor(private repository: PersonaRepository) {}
+  async getAll(): Promise<Persona[]> {
+    return await PersonaModel.find().populate("vehiculo");
+  }
 
-    getAll() {
-        return this.repository.getAll();
-    }
+  async getById(id: string): Promise<Persona | null> {
+    return await PersonaModel.findById(id).populate("vehiculo");
+  }
 
-    getById(id: string) {
-        return this.repository.getById(id);
-    }
+  async delete(id: string): Promise<Persona | null> {
+    return await PersonaModel.findByIdAndDelete(id);
+  }
 
-    getNombreApellidoById(id: string): { nombre: string; apellido: string } | undefined {
-        const persona = this.repository.getById(id);
-        if (!persona) return undefined;
-        return {
-            nombre: persona.nombre,
-            apellido: persona.apellido,
-        };
-    }
-    create(personaData: Omit<Persona, 'id'>) {
-        const existe = this.repository.getAll().some((p) => p.DNI === personaData.DNI);
-        if (existe) {
-            throw new Error('DNI duplicado');
-        }
-        return this.repository.create(personaData);
-    }
+  async create(data: Partial<Persona>) {
+    const personaModelo = new PersonaModel(data);
+    return await personaModelo.save();
+  }
 
-    update(id: string, updates: Partial<Persona>) {
-        return this.repository.update(id, updates);
-    }
+  async update(id: string, datos: Partial<PersonaDto>): Promise<Persona | null> {
+    return await PersonaModel.findByIdAndUpdate(id, datos, { new: true }).populate("vehiculo");
+  }
 
-    delete(id: string) {
-        return this.repository.delete(id);
-    }
-
-    browse() {
-        return this.repository.browse();
-    }
+  async findByDni(dni: string): Promise<Persona | null> {
+    return await PersonaModel.findOne({ DNI: dni });
+  }
 }

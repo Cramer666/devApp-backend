@@ -1,18 +1,36 @@
-import { index } from '.';
-import { Auto } from '../models/auto';
+import mongoose, { Schema } from 'mongoose';
+import { Genero } from './generoEnum';
 
-type Genero = 'Masculino' | 'Femenino' | 'No binario';
-
-export interface Persona extends index {
+export interface Persona {
+  _id: string;
+  nombre: string;
+  apellido: string;
+  dni: string;
+  fechaNacimiento: Date;
+  donante?: boolean;
+  genero?: Genero;
+  vehiculo?: {
+    marca: string;
+    modelo: string;
     patente: string;
-    nroDeChasis: string;
-    /*Si le pones un ? es optativo el campo */
-    /*Leer sobre tipos de typescript*/
-    nombre: string;
-    apellido: string;
-    DNI: string;
-    fechaDeNacimiento: Date;
-    genero: Genero;
-    donante: boolean;
-    vehiculo: Auto[];
+  }[];
 }
+
+
+const VehiculoSchema = new Schema({
+  marca: String,
+  modelo: String,
+  patente: String
+});
+
+const PersonaSchema = new Schema<Persona>({
+  nombre: { type: String, required: true },
+  apellido: { type: String, required: true },
+  dni: { type: String, required: true, unique: true },
+  fechaNacimiento: { type: Date, required: false, unique: false},
+  donante: { type: Boolean, default: false },
+  genero: { type: String, enum: ["Masculino", "Femenino", "No-Binario"] },
+  vehiculo: [VehiculoSchema]
+});
+
+export const PersonaModel = mongoose.model<Persona>('Persona', PersonaSchema);

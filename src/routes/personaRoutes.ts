@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { PersonaController } from '../controllers/personaController';
 import { PersonaService } from '../services/personaServices';
-import { personaRepo } from '../repositories/indexRepository';
+
+
 
 const router: Router = Router();
-const service = new PersonaService(personaRepo);
+const service = new PersonaService();
 const controller = new PersonaController(service);
 
 router.get('/', controller.getAll);
@@ -16,3 +17,4 @@ router.put('/:id', controller.update);
 router.delete('/:id', controller.delete);
 
 export default router;
+

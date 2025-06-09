@@ -1,6 +1,5 @@
-
-export enum Genero{
-    M ="Masculino",
-    F ="Femenino",
-    NBin ="No-Binario",
+export enum Genero {
+  Masculino = "Masculino",
+  Femenino = "Femenino",
+  NoBinario = "No-Binario",
 }

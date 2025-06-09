@@ -1,19 +1,30 @@
 import express from 'express';
+import { conexionMongo } from './mongo/mongo';
+import personaRoutes from './routes/personaRoutes';
+import autoRoutes from './routes/autoRoutes';
+import dotenv from 'dotenv';
 import cors from 'cors';
-import bodyParser from 'body-parser';
-import helmet from 'helmet';
-import router from './routes/indexRoutes';
-import * as dotenv from 'dotenv';
+
 dotenv.config();
 
+
+
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(helmet());
-app.use(bodyParser.json());
-app.use('/', router);
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
 
-app.listen(port, () => {
-    console.log(`Servidor corriendo en el puerto ${port}`);
+app.use(express.json());
+
+conexionMongo();
+
+app.use('/personas', personaRoutes);
+app.use('/autos', autoRoutes);
+
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en puerto ${PORT}`);
 });
+

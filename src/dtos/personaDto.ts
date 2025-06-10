@@ -1,6 +1,7 @@
-import { Persona, PersonaModel } from "../models";
+import { Persona, PersonaModel } from "../models/persona";
 import { Genero } from "../models/generoEnum";
-
+/*Crei q eran optativos o poco importantes pero resulta q fueron necesarios,
+no extrictamente pero por seguridad tamb...*/
 export interface PersonaDto {
   id: string;
   nombre: string;

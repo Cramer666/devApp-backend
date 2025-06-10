@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { InferSchemaType, Schema } from 'mongoose';
 import { Genero } from './generoEnum';
 
 export interface Persona {
@@ -16,7 +16,7 @@ export interface Persona {
   }[];
 }
 
-
+/*hago modelos para el mongo*/
 const VehiculoSchema = new Schema({
   marca: String,
   modelo: String,
@@ -32,5 +32,5 @@ const PersonaSchema = new Schema<Persona>({
   genero: { type: String, enum: ["Masculino", "Femenino", "No-Binario"] },
   vehiculo: [VehiculoSchema]
 });
-
-export const PersonaModel = mongoose.model<Persona>('Persona', PersonaSchema);
+export type persona = InferSchemaType<typeof PersonaSchema>;
+export const PersonaModel = mongoose.model<Persona>('persona', PersonaSchema);

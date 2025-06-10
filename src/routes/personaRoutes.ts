@@ -1,20 +1,12 @@
-import { Router } from 'express';
-import { PersonaController } from '../controllers/personaController';
-import { PersonaService } from '../services/personaServices';
+import { controladorPersona } from "../controllers/personaController";
+import { crearRouterGenerico } from "./routerGenerico";
 
+const routerPersona = crearRouterGenerico(controladorPersona);
 
+/*Ruta propia*/
+routerPersona.get("/autos/:id", controladorPersona.listarAutos);
 
-const router: Router = Router();
-const service = new PersonaService();
-const controller = new PersonaController(service);
+export { routerPersona };
 
-router.get('/', controller.getAll);
-router.get('/browse', controller.browse);
-router.get('/nombre-apellido/:id', controller.getNombreApellidoById);
-router.get('/:id', controller.getById);
-router.post('/', controller.create);
-router.put('/:id', controller.update);
-router.delete('/:id', controller.delete);
-
-export default router;
-
+//Tengo q hacer cuando pueda
+//routerPersona.get("/nombre-apellido/:id, controladorPersona.obtenerNombreyApellido")

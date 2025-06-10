@@ -1,18 +1,14 @@
-import { Router } from 'express';
-import { AutoController } from '../controllers/autoController';
-import { AutoService } from '../services/autoServices';
+import { Router } from "express";
+import { controladorAuto, controladorAutoConExtras } from "../controllers/autoController";
+import { crearRouterGenerico } from "./routerGenerico";
+
+const routerAuto = crearRouterGenerico(controladorAuto);
+//Ruta propia
+routerAuto.get("/duenios/:id", controladorAutoConExtras.listarDuenos);
+
+export { routerAuto };
 
 
-const router = Router();
-const autoService = new AutoService();
-const autoController = new AutoController(autoService);
-
-
-router.get('/', autoController.getAll);
-router.get('/:id', autoController.getById);
-router.post('/', autoController.create);
-router.put('/:id', autoController.update);
-router.delete('/:id', autoController.delete);
-
-export default router;
-
+//Hacer si me da el tiempo.
+//routerAuto.get('/patente/:patente', controller.buscarPorPatente);
+//routerAuto.get('/sin-duenio', controller.autosSinDuenio);

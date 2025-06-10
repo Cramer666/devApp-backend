@@ -1,53 +1,55 @@
-import { Request, Response } from 'express';
-import { AutoService } from '../services/autoServices';
-import {pasarAModelo} from '../dtos/autoDto';
+import { AutoModel } from "../models/auto";
+import { crearServicioGenerico } from "../utils/generadorServicio";
+import { pasarADto, pasarAModelo } from "../dtos/autoDto";
+import { crearControladorGenerico } from "./entityController";
+import { validarCamposRequeridos, validarFormatoPatente } from "../middlewares/validaciones";
+import { Request, Response } from "express";
 
+const servicioAuto = crearServicioGenerico(AutoModel, {
+  pasarADto,
+  pasarAModelo
+});
 
-export class AutoController {
+export const controladorAuto = crearControladorGenerico(servicioAuto, {
+  validacionesPost: [
+    validarCamposRequeridos([
+      "marca",
+      "modelo",
+      "anio",
+      "patente",
+      "color",
+      "nroDeChasis",
+      "motor",
+      "duenioId"
+    ]),
+    //validarFormatoPatente("patente")
+  ]
+});
 
-    constructor(private service: AutoService) {}
+// este es solamente para los autos ...
+const listarDuenos = async (req: Request, res: Response) => {
+  try {
+    const autosConDuenios = await AutoModel.find()
+      .populate('duenioId', 'nombre apellido');
 
-    getAll = async (req: Request, res: Response) => {
-        const autos = await this.service.getAll();
-        res.json(autos);
+    const resultado = autosConDuenios.map(auto => ({
+      _id: auto._id,
+      marca: auto.marca,
+      modelo: auto.modelo,
+      duenio: auto.duenioId ? {
+        nombre: (auto.duenioId as any).nombre,
+        apellido: (auto.duenioId as any).apellido
+      } : null
+    }));
 
-    };
+    res.json(resultado);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al listar dueños" });
+  }
+};
 
-
-    getById = async (req: Request, res: Response) => {
-        const auto = await this.service.getById(req.params.id);
-
-        if (!auto) res.status(404).json({ error: 'Auto no encontrado' });
-        res.json(auto);
-
-    };
-
-
-
-    create = async (req: Request, res: Response) => {
-        try {
-            const autoDto= req.body;
-            const auto= pasarAModelo(autoDto);
-            const nuevoAuto = this.service.create(auto);
-            res.status(201).json(nuevoAuto);
-        } catch {
-            res.status(400).json({ error: 'Error al crear auto' });
-        }
-    };
-
-
-    update = async (req: Request, res: Response) => {
-        const autoActualizado = await this.service.update(req.params.id, req.body);
-        if (!autoActualizado) res.status(404).json({ error: 'Auto no encontrado' });
-        res.json(autoActualizado);
-    };
-
-
-    delete = async (req: Request, res: Response) => {
-        const autoEliminado = await this.service.delete(req.params.id);
-        if (!autoEliminado) res.status(404).json({ error: 'Auto no encontrado' });
-        res.status(204).end();
-    };
-
-}
-
+export const controladorAutoConExtras = {
+  ...controladorAuto,
+  listarDuenos
+};

@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, InferSchemaType } from 'mongoose';
 
 export interface Auto extends Document {
     _id:string;
@@ -13,8 +13,7 @@ export interface Auto extends Document {
 
 }
 
-
-
+/*hago modelos para el mongo*/
 const AutoSchema = new Schema<Auto>({
     marca: { type: String, required: true },
     modelo: { type: String, required: true },
@@ -22,11 +21,11 @@ const AutoSchema = new Schema<Auto>({
     patente: { type: String, required: true },
     nroDeChasis: { type: String, required: true },
     motor: { type: String, required: true },
-    duenioId: { type: Schema.Types.ObjectId, ref: 'Usuario', default: null },
+    duenioId: { type: Schema.Types.ObjectId, ref: 'persona', default: null },
 
 });
 
 
-
-export const AutoModel = mongoose.model<Auto>('Auto', AutoSchema);
+export type auto = InferSchemaType<typeof AutoSchema>;
+export const AutoModel = mongoose.model<Auto>('auto', AutoSchema);
 

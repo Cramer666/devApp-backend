@@ -29,7 +29,7 @@ export class MongoRepository<T extends Document, Q extends FilterQuery<T>> {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async findOneByFields(fields: Partial<Record<keyof T, any>>): Promise<T | null> {
+    async findOneByFields(fields: Partial<Record<keyof T, any>>): Promise<T | null> { //*a check
         return this.model.findOne(fields).exec();
     }
 }

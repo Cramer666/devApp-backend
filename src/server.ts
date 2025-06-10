@@ -1,7 +1,7 @@
 import express from 'express';
 import { conexionMongo } from './mongo/mongo';
-import personaRoutes from './routes/personaRoutes';
-import autoRoutes from './routes/autoRoutes';
+import {routerPersona} from './routes/personaRoutes';
+import {routerAuto} from './routes/autoRoutes';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
@@ -21,8 +21,8 @@ app.use(express.json());
 
 conexionMongo();
 
-app.use('/personas', personaRoutes);
-app.use('/autos', autoRoutes);
+app.use('/personas', routerPersona);
+app.use('/autos', routerAuto);
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);

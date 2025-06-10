@@ -1,5 +1,6 @@
-import { Auto, AutoModel } from "../models";
-
+import { Auto, AutoModel } from "../models/auto";
+/*Crei q eran optativos o poco importantes pero resulta q fueron necesarios,
+no extrictamente pero por seguridad tamb...*/
 export interface AutoDto {
     id: string;
     marca: string;
@@ -10,27 +11,6 @@ export interface AutoDto {
     nroDeChasis: string;
     motor: string;
     duenioId: string | null;
-}
-
-export interface AutoCreadoDTO {
-  marca: string;
-  modelo: string;
-  anio: number;
-  patente: string;
-  color: string;
-  nroChasis: string;
-  nroMotor: string;
-  dueñoId: string;
-}
-
-export interface AutoActualizadoDTO {
-  marca?: string;
-  modelo?: string;
-  anio?: number;
-  patente?: string;
-  color?: string;
-  nroChasis?: string;
-  nroMotor?: string;
 }
 
 export function pasarADto(auto: Auto): AutoDto {
@@ -61,5 +41,4 @@ export function pasarAModelo(autoDto: AutoDto) {
         motor: autoDto.motor,
         duenioId: autoDto.duenioId
     });
-}
-
+};

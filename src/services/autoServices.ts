@@ -1,25 +1,19 @@
-import { AutoModel } from '../models/auto';
-import { Auto } from '../models/auto';
+import { AutoModel } from "../models/auto";
+import { crearServicioGenerico } from "../utils/generadorServicio";
 
-export class AutoService {
-    async getAll() {
-        return await AutoModel.find();
-    }
+export const servicioAuto = crearServicioGenerico(AutoModel);
 
-    async getById(id: string) {
-        return await AutoModel.findById(id);
-    }
+export const listarDuenos = async () => {
+  const autosConDuenios = await AutoModel.find()
+    .populate('duenioId', 'nombre apellido');
 
-    async create(autoData: Omit<Auto, 'id'>) {
-        const auto = new AutoModel(autoData);
-        return await auto.save();
-    }
-
-    async update(id: string, updates: Partial<Auto>) {
-        return await AutoModel.findByIdAndUpdate(id, updates, { new: true });
-    }
-
-    async delete(id: string) {
-        return await AutoModel.findByIdAndDelete(id);
-    }
-}
+  return autosConDuenios.map(auto => ({
+    _id: auto._id,
+    marca: auto.marca,
+    modelo: auto.modelo,
+    duenio: auto.duenioId ? {
+      nombre: (auto.duenioId as any).nombre,
+      apellido: (auto.duenioId as any).apellido
+    } : null
+  }));
+};

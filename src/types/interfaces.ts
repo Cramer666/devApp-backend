@@ -8,6 +8,7 @@ export interface ServicioGenerico {
   add(data: any): Promise<any>;
   remove(id: string): Promise<void>;
   update(id: string, data: any): Promise<any>;
+  browse(query?: any): Promise<any[]>;
 }
 
 export interface ControladorGenerico {
@@ -16,5 +17,6 @@ export interface ControladorGenerico {
   add: (req: Request, res: Response) => void;
   remove: (req: Request, res: Response) => void;
   update: (req: Request, res: Response) => void;
+  browse: (req: Request, res: Response) => void
   validacionesPost?: any[];
 }

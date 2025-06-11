@@ -1,10 +1,15 @@
+import { Router } from "express";
 import { controladorPersona } from "../controllers/personaController";
 import { crearRouterGenerico } from "./routerGenerico";
 
-const routerPersona = crearRouterGenerico(controladorPersona);
+const routerPersona = Router();
 
-/*Ruta propia*/
+/*Rutas propias*/
+routerPersona.get("/browse", controladorPersona.browse);
 routerPersona.get("/autos/:id", controladorPersona.listarAutos);
+
+const routerGenerico = crearRouterGenerico(controladorPersona);
+routerPersona.use(routerGenerico);
 
 export { routerPersona };
 

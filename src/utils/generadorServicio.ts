@@ -1,6 +1,7 @@
 export function crearServicioGenerico(Modelo: any, opciones?: {
   pasarADto?: (entidad: any) => any,
-  pasarAModelo?: (dto: any) => any
+  pasarAModelo?: (dto: any) => any,
+  browse?: (filtros: any) => Promise<any>
 }) {
   return {
     getAll: async () => {
@@ -9,6 +10,19 @@ export function crearServicioGenerico(Modelo: any, opciones?: {
         ? entidades.map(opciones.pasarADto)
         : entidades;
     },
+
+    browse: async (filtros: any) => {
+      if (!opciones?.browse) {
+        throw new Error("browse no implementado");
+      }
+      const resultado = await opciones.browse(filtros);
+      return opciones?.pasarADto
+        ? Array.isArray(resultado)
+          ? resultado.map(opciones.pasarADto)
+          : opciones.pasarADto(resultado)
+        : resultado;
+    },
+
     getById: async (id: string) => {
       const entidad = await Modelo.findById(id);
       return opciones?.pasarADto ? opciones.pasarADto(entidad) : entidad;

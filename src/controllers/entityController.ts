@@ -12,6 +12,16 @@ export function crearControladorGenerico(
     res.json(data);
   };
 
+  const browse = async (req: Request, res: Response) => {
+    try {
+      const data = await servicio.browse?.(req.query);
+      res.status(200).json(data);
+    } catch (e: any) {
+       console.error("Error en browse:", Error);
+      res.status(500).json({ error: e.message });
+    }
+  };
+
   const getById = async (req: Request, res: Response) => {
     const data = await servicio.getById(req.params.id);
     res.json(data);
@@ -40,6 +50,7 @@ export function crearControladorGenerico(
   return {
     getAll,
     getById,
+    browse,
     add,
     remove,
     update,

@@ -12,6 +12,16 @@ export function validarCamposRequeridos(campos: string[]) {
   };
 }
 
+export function manejarErrores(
+  err: any,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  console.error(err.stack);
+  res.status(500).json({ mensaje: 'Error interno del servidor.' });
+}
+
 
 /*--------------------------------------------------------------------------------------------*/
 

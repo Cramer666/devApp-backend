@@ -1,7 +1,11 @@
 import { AutoModel } from "../models/auto";
 import { crearServicioGenerico } from "../utils/generadorServicio";
 
-export const servicioAuto = crearServicioGenerico(AutoModel);
+export const browse = async () => {
+    return AutoModel.find().select("marca modelo anio patente");
+ }
+
+export const servicioAuto = crearServicioGenerico(AutoModel,{browse});
 
 export const listarDuenos = async () => {
   const autosConDuenios = await AutoModel.find()

@@ -2,9 +2,14 @@ import { Router } from "express";
 import { controladorAuto, controladorAutoConExtras } from "../controllers/autoController";
 import { crearRouterGenerico } from "./routerGenerico";
 
-const routerAuto = crearRouterGenerico(controladorAuto);
-//Ruta propia
+const routerAuto = Router();
+
+//Rutas propias
+routerAuto.get("/browse", controladorAuto.browse);
 routerAuto.get("/duenios/:id", controladorAutoConExtras.listarDuenos);
+
+const routerGenerico = crearRouterGenerico(controladorAuto);
+routerAuto.use(routerGenerico);
 
 export { routerAuto };
 

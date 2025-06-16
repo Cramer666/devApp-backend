@@ -15,7 +15,7 @@ export interface AutoDto {
 
 export function pasarADto(auto: Auto): AutoDto {
     const autoDto:AutoDto={
-        id:auto._id,
+        id:auto.id,
         marca:auto.marca,
         modelo:auto.modelo,
         anio:auto.anio,

@@ -17,13 +17,13 @@ export interface PersonaDto {
   }[];
 }
 
-export function pasarADto(persona: Persona): PersonaDto{
+export function pasarADto(persona: any): PersonaDto{
   const personaDto: PersonaDto={
-    id:persona._id,
+    id: persona._id?.toString(),
     nombre:persona.nombre,
     apellido:persona.apellido,
     dni:persona.dni,
-    fechaNacimiento: persona.fechaNacimiento,
+    fechaNacimiento: new Date(persona.fechaNacimiento),
     donante:persona.donante,
     genero:persona.genero,
     vehiculo:persona.vehiculo,

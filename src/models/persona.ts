@@ -2,7 +2,7 @@ import mongoose, { InferSchemaType, Schema } from 'mongoose';
 import { Genero } from './generoEnum';
 
 export interface Persona {
-  _id: string;
+  id: string;
   nombre: string;
   apellido: string;
   dni: string;

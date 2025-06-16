@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, InferSchemaType } from 'mongoose';
 
 export interface Auto extends Document {
-    _id:string;
+    id:string;
     marca: string;
     modelo: string;
     anio: number;
@@ -19,6 +19,7 @@ const AutoSchema = new Schema<Auto>({
     modelo: { type: String, required: true },
     anio: { type: Number, required: true },
     patente: { type: String, required: true },
+    color: { type: String, required: true},
     nroDeChasis: { type: String, required: true },
     motor: { type: String, required: true },
     duenioId: { type: Schema.Types.ObjectId, ref: 'persona', default: null },

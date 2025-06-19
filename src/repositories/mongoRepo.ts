@@ -1,35 +1,26 @@
-import { Model, FilterQuery, Document, UpdateQuery } from 'mongoose';
+import { IRepository } from "./repoGenerico";
+import { Model } from "mongoose";
 
-export class MongoRepository<T extends Document, Q extends FilterQuery<T>> {
-    private model: Model<T>;
+export class MongoRepository<T> implements IRepository<T> {
+  constructor(private model: Model<T>) {}
 
-    constructor(model: Model<T>) {
-        this.model = model;
-    }
+  async getAll(): Promise<T[]> {
+    return this.model.find();
+  }
 
-    async findAll(filter?: Q, projection?: string): Promise<T[]> {
-        return this.model.find(filter || {}, projection).exec();
-    }
+  async getById(id: string): Promise<T | null> {
+    return this.model.findById(id);
+  }
 
-    async findById(id: string): Promise<T | null> {
-        return this.model.findById(id).exec();
-    }
+  async create(item: T): Promise<T> {
+    return this.model.create(item);
+  }
 
-    async add(entity: Partial<T>): Promise<T> {
-        const newEntity = new this.model(entity);
-        return newEntity.save();
-    }
+  async update(id: string, item: Partial<T>): Promise<T | null> {
+    return this.model.findByIdAndUpdate(id, item, { new: true });
+  }
 
-    async deleteById(id: string): Promise<T | null> {
-        return this.model.findByIdAndDelete(id).exec();
-    }
-
-    async updateById(id: string, entity: UpdateQuery<T>): Promise<T | null> {
-        return this.model.findByIdAndUpdate(id, entity, { new: true }).exec();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async findOneByFields(fields: Partial<Record<keyof T, any>>): Promise<T | null> { //*a check
-        return this.model.findOne(fields).exec();
-    }
+  async delete(id: string): Promise<void> {
+    await this.model.findByIdAndDelete(id);
+  }
 }

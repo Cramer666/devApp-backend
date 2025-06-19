@@ -1,17 +1,18 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/entidadesApp';
+dotenv.config();
 
 export async function conexionMongo() {
-    try {
-        await mongoose.connect(MONGO_URI);
-        console.log('MongoDB conectado');
-    } catch (error) {
-        console.error('MongoDB no se pudo conectar. Error:', error);
-        process.exit(1);
-    }
-}
+  if (process.env.STORAGE !== "mongo") {
+    console.log("Mongo desactivado (modo memoria)");
+    return;
+  }
 
-export async function disconnectDB() {
-    await mongoose.disconnect();
+  try {
+    await mongoose.connect("mongodb://localhost:27017/devApp");
+    console.log("Conectado a MongoDB");
+  } catch (err) {
+    console.error("MongoDB no se pudo conectar. Error:", err);
+  }
 }

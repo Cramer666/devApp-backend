@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ControladorGenerico } from "../types/interfaces";
 
-//solo hacw las funcines basicas. Las que son de cada entidad la hacen en su router propio...
+//solo hacw las funciones basicas. Las que son de cada entidad la hacen en su router propio...
 
 export function crearRouterGenerico(controlador: ControladorGenerico) {
   const router = Router();

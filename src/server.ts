@@ -9,7 +9,8 @@ import cors from 'cors';
 
 dotenv.config();
 
-
+const storageType = process.env.STORAGE === "mongo" ? "MONGODB" : "MEMORIA";
+console.log(`Backend corriendo con almacenamiento: ${storageType}`);
 
 const app = express();
 const PORT = process.env.PORT || 3000;

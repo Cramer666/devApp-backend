@@ -11,7 +11,8 @@ export function validarCamposRequeridos(campos: string[]) {
     next();
   };
 }
-
+//captura errores y devuelve una respuesta linda...
+//usa la libreria express-async-errors, tuve q cambiar la version de node...
 export function manejarErrores(
   err: any,
   req: Request,
@@ -21,7 +22,6 @@ export function manejarErrores(
   console.error(err.stack);
   res.status(500).json({ mensaje: 'Error interno del servidor.' });
 }
-
 
 /*--------------------------------------------------------------------------------------------*/
 

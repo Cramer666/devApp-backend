@@ -5,8 +5,8 @@ import { crearRouterGenerico } from "./routerGenerico";
 const routerPersona = Router();
 
 /*Rutas propias*/
-routerPersona.get("/browse", controladorPersona.browse);
-routerPersona.get("/autos/:id", controladorPersona.listarAutos);
+//routerPersona.get("/browse", controladorPersona.browse);
+//routerPersona.get("/autos/:id", controladorPersona.listarAutos);
 
 const routerGenerico = crearRouterGenerico(controladorPersona);
 routerPersona.use(routerGenerico);

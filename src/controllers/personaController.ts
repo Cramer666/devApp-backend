@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { servicioPersona, listarAutosPorPersona } from "../services/personaServide";
+import { servicioPersona } from "../services/personaServide";//desp poner , listarAutosPorPersona
 import { crearControladorGenerico } from "./entityController";
 import { validarCamposRequeridos } from "../middlewares/validaciones";
 
@@ -17,7 +17,7 @@ const controladorBase = crearControladorGenerico(servicioPersona, {
 });
 
 // Mtodo propio para listar autos de una persona...
-const listarAutos = async (req: Request, res: Response) => {
+/*const listarAutos = async (req: Request, res: Response) => {
   try {
     const personaId = req.params.id;
     const autos = await listarAutosPorPersona(personaId);
@@ -25,9 +25,9 @@ const listarAutos = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ error: "Error al listar autos de la persona" });
   }
-};
+};*/
 
 export const controladorPersona = {
   ...controladorBase,
-  listarAutos,
+  //listarAutos,
 };

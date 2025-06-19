@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, InferSchemaType } from 'mongoose';
 
+
 export interface Auto extends Document {
     id:string;
     marca: string;

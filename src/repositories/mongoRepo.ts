@@ -1,4 +1,4 @@
-import { IRepository } from "./repoGenerico";
+import { IRepository } from "./interfaceRepo";
 import { Model } from "mongoose";
 
 export class MongoRepository<T> implements IRepository<T> {
@@ -20,7 +20,7 @@ export class MongoRepository<T> implements IRepository<T> {
     return this.model.findByIdAndUpdate(id, item, { new: true });
   }
 
-  async delete(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.model.findByIdAndDelete(id);
   }
 }

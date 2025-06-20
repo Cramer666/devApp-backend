@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ServicioGenerico } from "../types/interfaces";
+import { ServicioGenerico } from "../services/serviceGenerico";
 
 export function crearControladorGenerico(
   servicio: ServicioGenerico,
@@ -27,13 +27,13 @@ export function crearControladorGenerico(
     res.json(data);
   };
 
-  const add = async (req: Request, res: Response) => {
-    const nuevo = await servicio.add(req.body);
+  const create = async (req: Request, res: Response) => {
+    const nuevo = await servicio.create(req.body);
     res.status(201).json(nuevo);
   };
 
   const remove = async (req: Request, res: Response) => {
-    await servicio.remove(req.params.id);
+    await servicio.create(req.params.id);
     res.status(204).end();
   };
 
@@ -51,7 +51,7 @@ export function crearControladorGenerico(
     getAll,
     getById,
     browse,
-    add,
+    create,
     remove,
     update,
     validacionesPost: opciones?.validacionesPost || []

@@ -1,34 +1,49 @@
 import express from 'express';
 import 'express-async-errors';
 import { conexionMongo } from './mongo/mongo';
-import {routerPersona} from './routes/personaRoutes';
-import {routerAuto} from './routes/autoRoutes';
+import { routerPersona } from './routes/personaRoutes';
+import { routerAuto } from './routes/autoRoutes';
 import { manejarErrores } from './middlewares/validaciones';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
 dotenv.config();
 
-const storageType = process.env.STORAGE === "mongo" ? "MONGODB" : "MEMORIA";
-console.log(`Backend corriendo con almacenamiento: ${storageType}`);
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.use(express.json());
+const initializeServer = async () => {
+  const storageType = process.env.STORAGE || 'memoria';
+  console.log(`Backend corriendo con almacenamiento: ${storageType.toUpperCase()}`);
 
-conexionMongo();
+  if (storageType === "mongo") {
+    try {
+      await conexionMongo();
+      console.log('Conexión a MongoDB establecida');
+    } catch (error) {
+      console.error('Error conectando a MongoDB:', error);
+      process.exit(1);
+    }
+  }
 
-app.use('/personas', routerPersona);
-app.use('/autos', routerAuto);
-app.use(manejarErrores);
+  app.use('/personas', routerPersona);
+  app.use('/autos', routerAuto);
 
-app.listen(PORT, () => {
+  app.use(manejarErrores);
+
+  app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
-});
+  });
+};
 
+initializeServer().catch(error => {
+  console.error('Error al iniciar el servidor:', error);
+  process.exit(1);
+});

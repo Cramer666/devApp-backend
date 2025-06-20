@@ -5,7 +5,10 @@ import { crearControladorGenerico } from "./entityController";
 import { validarCamposRequeridos, validarFormatoPatente } from "../middlewares/validaciones";
 import { Request, Response } from "express";
 
-const servicioAuto = crearServicioGenerico(AutoModel, {
+// Selecciona el modelo basado en STORAGE
+const modelo = process.env.STORAGE === "memoria" ? null : AutoModel;
+
+const servicioAuto = crearServicioGenerico(modelo, {
   pasarADto,
   pasarAModelo
 });
@@ -22,12 +25,16 @@ export const controladorAuto = crearControladorGenerico(servicioAuto, {
       "motor",
       "duenioId"
     ]),
-    //validarFormatoPatente("patente")
+    validarFormatoPatente("patente")
   ]
 });
 
-// este es solamente para los autos ...
+// solo funciona con mongo x ahora
 const listarDuenos = async (req: Request, res: Response) => {
+  if (process.env.STORAGE === "memoria") {
+    return res.status(400).json({ error: "Esta función no está disponible en modo memoria" });
+  }
+
   try {
     const autosConDuenios = await AutoModel.find()
       .populate('duenioId', 'nombre apellido');

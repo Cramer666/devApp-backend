@@ -1,10 +1,10 @@
 
-import { IRepository } from "../repositories/repoGenerico";
+import { IRepository } from "../repositories/interfaceRepo";
 import { InMemoryRepository } from "../repositories/memoriaRepo";
 import { MongoRepository } from "../repositories/mongoRepo";
 import { Auto } from "../models/auto";
 import { AutoModel } from "../models/auto";
-import { personaRepository } from "./personaServide";
+import { personaRepository } from "./personaServise";
 import dotenv from "dotenv";
 import { crearServicioGenerico } from "../utils/generadorServicio";
 

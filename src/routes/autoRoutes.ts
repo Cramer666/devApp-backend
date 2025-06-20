@@ -6,7 +6,7 @@ const routerAuto = Router();
 
 //Rutas propias
 routerAuto.get("/browse", controladorAuto.browse);
-routerAuto.get("/duenios/:id", controladorAutoConExtras.listarDuenos);
+//routerAuto.get("/duenios/:id", controladorAutoConExtras.listarDuenos);
 
 const routerGenerico = crearRouterGenerico(controladorAuto);
 routerAuto.use(routerGenerico);

@@ -1,4 +1,4 @@
-import { IRepository } from "./repoGenerico";
+import { IRepository } from "./interfaceRepo";
 import { v4 as uuidv4 } from "uuid";
 
 export class InMemoryRepository<T extends { id?: string }> implements IRepository<T> {
@@ -18,6 +18,13 @@ export class InMemoryRepository<T extends { id?: string }> implements IRepositor
     return item;
   }
 
+  /*async browse?(filtros: any):Promise<T[]>{
+    return Promise.resolve(this.items.filter(item => {
+      return Object.entries(filtros).every(([Key,value]) => item[Key]== value);
+      }))
+    }*/
+
+
   async update(id: string, item: Partial<T>): Promise<T | null> {
     const index = this.items.findIndex(i => i.id === id);
     if (index === -1) return null;
@@ -25,7 +32,7 @@ export class InMemoryRepository<T extends { id?: string }> implements IRepositor
     return this.items[index];
   }
 
-  async delete(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     this.items = this.items.filter(i => i.id !== id);
   }
 }

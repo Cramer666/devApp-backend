@@ -44,6 +44,6 @@ const initializeServer = async () => {
 };
 
 initializeServer().catch(error => {
-  console.error('Error al iniciar el servidor:', error);
+  console.error(' Error al iniciar el servidor:', error);
   process.exit(1);
 });

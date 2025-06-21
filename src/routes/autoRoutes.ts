@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { controladorAuto, controladorAutoConExtras } from "../controllers/autoController";
+import { controladorAuto} from "../controllers/autoController";
 import { crearRouterGenerico } from "./routerGenerico";
 
 const routerAuto = Router();

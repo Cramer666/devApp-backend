@@ -6,7 +6,7 @@ import { Auto } from "../models/auto";
 import { AutoModel } from "../models/auto";
 import { personaRepository } from "./personaServise";
 import dotenv from "dotenv";
-import { crearServicioGenerico } from "../utils/generadorServicio";
+import { ServicioGenerico } from "../services/servicioGenerico";
 
 dotenv.config();
 const useMongo = process.env.STORAGE === "mongo";
@@ -27,9 +27,7 @@ export const browse = async () => {
   }));
 };
 
-export const servicioAuto = crearServicioGenerico(autoRepository, {
-  browse
-});
+export const servicioAuto = new ServicioGenerico(autoRepository);
 
 export const listarDuenos = async () => {
   const autos = await autoRepository.getAll();

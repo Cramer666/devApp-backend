@@ -1,59 +1,34 @@
 import { Request, Response } from "express";
-import { ServicioGenerico } from "../services/serviceGenerico";
 
-export function crearControladorGenerico(
-  servicio: ServicioGenerico,
-  opciones?: {
-    validacionesPost?: any[]
-  }
-) {
-  const getAll = async (req: Request, res: Response) => {
-    const data = await servicio.getAll();
-    res.json(data);
-  };
-
-  const browse = async (req: Request, res: Response) => {
-    try {
-      const data = await servicio.browse?.(req.query);
-      res.status(200).json(data);
-    } catch (e: any) {
-       console.error("Error en browse:", Error);
-      res.status(500).json({ error: e.message });
-    }
-  };
-
-  const getById = async (req: Request, res: Response) => {
-    const data = await servicio.getById(req.params.id);
-    res.json(data);
-  };
-
-  const create = async (req: Request, res: Response) => {
-    const nuevo = await servicio.create(req.body);
-    res.status(201).json(nuevo);
-  };
-
-  const remove = async (req: Request, res: Response) => {
-    await servicio.create(req.params.id);
-    res.status(204).end();
-  };
-
-
-  const update = async (req: Request, res: Response) => {
-    try {
-      const actualizado = await servicio.update(req.params.id, req.body);
-      res.json(actualizado);
-    } catch (error) {
-      res.status(500).json({ error: "Error al actualizar" });
-    }
-  };
-
+export function crearControladorGenerico(servicio: any, opciones: any) {
   return {
-    getAll,
-    getById,
-    browse,
-    create,
-    remove,
-    update,
-    validacionesPost: opciones?.validacionesPost || []
+    getAll: async (req: Request, res: Response) => {
+      const data = await servicio.getAll();
+      res.json(opciones.pasarADto ? data.map(opciones.pasarADto) : data);
+    },
+    getById: async (req: Request, res: Response) => {
+      const entidad = await servicio.getById(req.params.id);
+      if (!entidad) res.status(404).send();
+      res.json(opciones.pasarADto ? opciones.pasarADto(entidad) : entidad);
+    },
+    create: async (req: Request, res: Response) => {
+      const data = opciones.pasarAModelo ? opciones.pasarAModelo(req.body) : req.body;
+      const creado = await servicio.create(data);
+      res.status(201).json(opciones.pasarADto ? opciones.pasarADto(creado) : creado);
+    },
+    update: async (req: Request, res: Response) => {
+      const data = opciones.pasarAModelo ? opciones.pasarAModelo(req.body) : req.body;
+      const actualizado = await servicio.update(req.params.id, data);
+      res.json(opciones.pasarADto ? opciones.pasarADto(actualizado) : actualizado);
+    },
+    remove: async (req: Request, res: Response) => {
+      await servicio.remove(req.params.id);
+      res.status(204).send();
+    },
+    browse: async (req: Request, res: Response) => {
+      const data = await servicio.browse(req.query);
+      res.json(opciones.pasarADto ? data.map(opciones.pasarADto) : data);
+    },
+    validacionesPost: opciones.validacionesPost ?? []
   };
 }

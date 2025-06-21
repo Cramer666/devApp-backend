@@ -1,6 +1,6 @@
 /*Idea by Eze, me ayudo a hacer todo mas generico...*/
 
-export interface ServicioGenerico {
+export interface IService{
   getAll(): Promise<any[]>;
   getById(id: string): Promise<any>;
   create(data: any): Promise<any>;

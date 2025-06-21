@@ -18,12 +18,11 @@ export class InMemoryRepository<T extends { id?: string }> implements IRepositor
     return item;
   }
 
-  /*async browse?(filtros: any):Promise<T[]>{
+ /* async browse?(filtros: any):Promise<T[]>{
     return Promise.resolve(this.items.filter(item => {
       return Object.entries(filtros).every(([Key,value]) => item[Key]== value);
-      }))
-    }*/
-
+  }))
+  }*///ACOMODAR!!
 
   async update(id: string, item: Partial<T>): Promise<T | null> {
     const index = this.items.findIndex(i => i.id === id);

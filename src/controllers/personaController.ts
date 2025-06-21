@@ -1,18 +1,19 @@
 import { Request, Response } from "express";
-import { PersonaModel } from "../models/persona";
-import { crearServicioGenerico } from "../utils/generadorServicio";
+import { Persona, PersonaModel } from "../models/persona";
 import { crearControladorGenerico } from "./entityController";
 import { validarCamposRequeridos } from "../middlewares/validaciones";
-import { pasarADto as personaPasarADto, pasarAModelo as personaPasarAModelo } from "../dtos/personaDto";
 import { AutoModel } from "../models/auto";
+import { PersonaService } from "../services/personaServise";
+import { InMemoryRepository } from "../repositories/memoriaRepo";
+import { MongoRepository } from "../repositories/mongoRepo";
 
-// Selecciona el modelo basado en STORAGE
-const modelo = process.env.STORAGE === "memoria" ? null : PersonaModel;
 
-const servicioPersona = crearServicioGenerico(modelo, {
-  pasarADto: personaPasarADto,
-  pasarAModelo: personaPasarAModelo
-});
+const repoPersona = process.env.STORAGE === "memoria"
+  ? new InMemoryRepository<Persona>()
+  : new MongoRepository<Persona>(PersonaModel);
+
+
+const servicioPersona = new PersonaService(repoPersona);
 
 const controladorBase = crearControladorGenerico(servicioPersona, {
   validacionesPost: [
@@ -27,7 +28,6 @@ const controladorBase = crearControladorGenerico(servicioPersona, {
   ]
 });
 
-// solo funciona con mongo x ahora
 const listarAutos = async (req: Request, res: Response) => {
   if (process.env.STORAGE === "memoria") {
     return res.status(400).json({ error: "Esta función no está disponible en modo memoria" });

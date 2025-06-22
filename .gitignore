@@ -9,6 +9,5 @@ tsconfig.build.json
 
 dist/
 *.env
-/config/*.json
 
 #El * es para que ignore todos los archivos con ese nombre.

@@ -9,5 +9,6 @@ tsconfig.build.json
 
 dist/
 *.env
+config/entidadesapp-firebase.json
 
 #El * es para que ignore todos los archivos con ese nombre.

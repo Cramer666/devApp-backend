@@ -30,8 +30,8 @@ export function pasarADto(auto: Auto): AutoDto {
 
 
 export function pasarAModelo(autoDto: AutoDto) {
-    return new AutoModel ({
-        _id: autoDto.id,
+    return {
+        id: autoDto.id,
         marca: autoDto.marca,
         modelo: autoDto.modelo,
         anio: autoDto.anio,
@@ -40,5 +40,6 @@ export function pasarAModelo(autoDto: AutoDto) {
         nroDeChasis: autoDto.nroDeChasis,
         motor: autoDto.motor,
         duenioId: autoDto.duenioId
-    });
-};
+    };
+}
+

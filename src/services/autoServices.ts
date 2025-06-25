@@ -1,47 +1,52 @@
-
-import { IRepository } from "../repositories/interfaceRepo";
-import { InMemoryRepository } from "../repositories/memoriaRepo";
-import { MongoRepository } from "../repositories/mongoRepo";
 import { Auto } from "../models/auto";
-import { AutoModel } from "../models/auto";
-import { personaRepository } from "./personaServise";
-import dotenv from "dotenv";
-import { ServicioGenerico } from "../services/servicioGenerico";
+import { Persona } from "../models/persona";
+import { IRepository } from "../repos/interfaceRepo";
 
-dotenv.config();
-const useMongo = process.env.STORAGE === "mongo";
+export class AutoService {
+  constructor(
+    private autoRepository: IRepository<Auto>,
+    private personaRepository: IRepository<Persona>
+  ) {}
+
+  getAll(): Promise<Auto[]> {
+    return this.autoRepository.getAll();
+  }
+
+  getById(id: string): Promise<Auto | null> {
+    return this.autoRepository.getById(id);
+  }
+
+  create(auto: Auto): Promise<Auto> {
+    return this.autoRepository.create(auto);
+  }
+
+  update(id: string, data: Partial<Auto>): Promise<Auto | null> {
+    return this.autoRepository.update(id, data);
+  }
+
+  remove(id: string): Promise<void> {
+    return this.autoRepository.remove(id);
+  }
+
+  //Metodos propios
+  async browse(): Promise<Partial<Auto>[]> {
+    const autos = await this.autoRepository.getAll();
+    return autos.map(({ marca, modelo, anio, patente }) => ({
+      marca,
+      modelo,
+      anio,
+      patente
+    }));
+  }
 
 
-export const autoRepository: IRepository<Auto> = useMongo
-  ? new MongoRepository<Auto>(AutoModel)
-  : new InMemoryRepository<Auto>();
+  async listarDuenios(idAuto: string): Promise<{ nombre: string; apellido: string } | null> {
+    const auto = await this.autoRepository.getById(idAuto);
+    if (!auto || !auto.duenioId) return null;
 
-
-export const browse = async () => {
-  const autos = await autoRepository.getAll();
-  return autos.map(({ marca, modelo, anio, patente }) => ({
-    marca,
-    modelo,
-    anio,
-    patente
-  }));
-};
-
-export const servicioAuto = new ServicioGenerico(autoRepository);
-
-export const listarDuenos = async () => {
-  const autos = await autoRepository.getAll();
-  const personas = await personaRepository.getAll();
-
-  return autos.map(auto => {
-    const duenio = personas.find(p => p.id === auto.duenioId) || null;
-    return {
-      id: auto.id,
-      marca: auto.marca,
-      modelo: auto.modelo,
-      duenio: duenio
-        ? { nombre: duenio.nombre, apellido: duenio.apellido }
-        : null
-    };
-  });
-};
+    const persona = await this.personaRepository.getById(auto.duenioId);
+    return persona
+      ? { nombre: persona.nombre, apellido: persona.apellido }
+      : null;
+  }
+}

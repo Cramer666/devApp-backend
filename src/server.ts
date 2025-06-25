@@ -1,8 +1,8 @@
 import express from 'express';
 import 'express-async-errors';
-import { conexionMongo } from './mongo/mongo';
-import { routerPersona } from './routes/personaRoutes';
-import { routerAuto } from './routes/autoRoutes';
+import { conexionMongo } from './config/mongo';
+import routerPersona  from './routes/personaRoutes';
+import routerAuto  from './routes/autoRoutes';
 import { manejarErrores } from './middlewares/validaciones';
 import dotenv from 'dotenv';
 import cors from 'cors';

@@ -3,19 +3,25 @@ import { InMemoryRepository } from "./memoriaRepo";
 import { FirebaseRepository } from "./firebaseRepo";
 import { IRepository } from "./interfaceRepo";
 import { Model } from "mongoose";
+import { config } from "dotenv";
 
-export function obtenerRepositorio<T extends { id?: string; }>(
-  storage: string,
+config(); // Carga variables de entorno del archivo .env
+
+const STORAGE = process.env.STORAGE?.toLowerCase() || "memoria";
+
+export function obtenerRepositorio<T extends { id?: string }>(
   firebaseNombre: string,
   modeloMongo?: Model<T>
 ): IRepository<T> {
-  switch (storage.toLowerCase()) {
-    case 'mongo':
-      if (!modeloMongo) throw new Error('Falta modelo Mongo para este storage');
+  switch (STORAGE) {
+    case "mongo":
+      if (!modeloMongo) throw new Error("Falta modelo Mongo para este storage");
       return new MongoRepository<T>(modeloMongo);
-    case 'firebase':
+
+    case "firebase":
       return new FirebaseRepository<T>(firebaseNombre);
-    case 'memoria':
+
+    case "memoria":
     default:
       return new InMemoryRepository<T>();
   }

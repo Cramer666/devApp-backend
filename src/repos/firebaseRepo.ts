@@ -1,4 +1,4 @@
-import admin from '../firebase/firebase';
+import admin from '../config/firebase';
 import { IRepository } from "./interfaceRepo";
 
 const db = admin.firestore();

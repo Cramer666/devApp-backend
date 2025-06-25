@@ -1,25 +1,16 @@
 import { Router } from "express";
-import { crearRouterGenerico } from "./routerGenerico";
-import { obtenerRepositorio } from "../repositories/factoryRepo";
-import { crearControladorGenerico } from "../controllers/entityController";
-import { Auto } from "../models/auto";
-import { AutoModel } from "../models/auto";
+import { controladorAuto } from "../controllers/autoController";
 
 const routerAuto = Router();
 
-const storage = process.env.STORAGE || "memoria";
-const repoAuto = obtenerRepositorio<Auto>(storage, "autos", AutoModel);
-
-const controladorAuto = crearControladorGenerico(repoAuto, {
-  pasarADto: (auto: Auto) => auto,
-  pasarAModelo: (input: any) => input,
-  validacionesPost: []
-});
-
+routerAuto.get("/", controladorAuto.getAll);
 routerAuto.get("/browse", controladorAuto.browse);
-// routerAuto.get("/duenios/:id", controladorAutoConExtras.listarDuenos);
+routerAuto.get("/:id", controladorAuto.getById);
+routerAuto.post("/", controladorAuto.create);
+routerAuto.put("/:id", controladorAuto.update);
+routerAuto.delete("/:id", controladorAuto.remove);
 
-const routerGenerico = crearRouterGenerico(controladorAuto);
-routerAuto.use(routerGenerico);
+// Ruta propia
+routerAuto.get("/duenios/:id", controladorAuto.listarDuenios);
 
-export { routerAuto };
+export default routerAuto;

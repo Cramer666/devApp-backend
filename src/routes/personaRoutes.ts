@@ -1,27 +1,17 @@
 import { Router } from "express";
-import { crearRouterGenerico } from "./routerGenerico";
-import { obtenerRepositorio } from "../repositories/factoryRepo";
-import { crearControladorGenerico } from "../controllers/entityController";
-import { Persona } from "../models/persona";
-import { PersonaModel } from "../models/persona";
+import { controladorPersona } from "../controllers/personaController";
 
 const routerPersona = Router();
 
-const storage = process.env.STORAGE || "memoria";
-const repoPersona = obtenerRepositorio<Persona>(storage, "personas", PersonaModel);
-
-const controladorPersona = crearControladorGenerico(repoPersona, {
-  pasarADto: (persona: Persona) => persona,
-  pasarAModelo: (input: any) => input,
-  validacionesPost: []
-});
-
-/*Rutas propias*/
+routerPersona.get("/", controladorPersona.getAll);
 routerPersona.get("/browse", controladorPersona.browse);
-// routerPersona.get("/autos/:id", controladorPersona.listarAutos);
-// routerPersona.get("/nombre-apellido/:id", controladorPersona.obtenerNombreyApellido);
+routerPersona.get("/:id", controladorPersona.getById);
+routerPersona.post("/", controladorPersona.create);
+routerPersona.put("/:id", controladorPersona.update);
+routerPersona.delete("/:id", controladorPersona.remove);
 
-const routerGenerico = crearRouterGenerico(controladorPersona);
-routerPersona.use(routerGenerico);
+// Ruta propia
 
-export { routerPersona };
+routerPersona.get("/autos/:id", controladorPersona.listarAutos);
+
+export default routerPersona;

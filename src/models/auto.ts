@@ -10,7 +10,7 @@ export interface Auto extends Document {
     color: string;
     nroDeChasis: string;
     motor: string;
-    duenioId: string | null;
+    duenioId: string;
 
 }
 
@@ -23,7 +23,7 @@ const AutoSchema = new Schema<Auto>({
     color: { type: String, required: true},
     nroDeChasis: { type: String, required: true },
     motor: { type: String, required: true },
-    duenioId: { type: Schema.Types.ObjectId, ref: 'persona', default: null },
+    duenioId: { type: String, ref: 'persona', default: null },
 
 });
 

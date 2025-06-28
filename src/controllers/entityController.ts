@@ -8,9 +8,14 @@ export function crearControladorGenerico(servicio: any, opciones: any) {
     },
     getById: async (req: Request, res: Response) => {
       const entidad = await servicio.getById(req.params.id);
-      if (!entidad) res.status(404).send();
-      res.json(opciones.pasarADto ? opciones.pasarADto(entidad) : entidad);
+
+      if (!entidad) {
+        res.status(404).send();
+      } else {
+        res.json(opciones.pasarADto ? opciones.pasarADto(entidad) : entidad);
+      }
     },
+
     create: async (req: Request, res: Response) => {
       const data = opciones.pasarAModelo ? opciones.pasarAModelo(req.body) : req.body;
       const creado = await servicio.create(data);

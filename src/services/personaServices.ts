@@ -24,9 +24,18 @@ export class PersonaService {
     return this.personaRepository.update(id, data);
   }
 
-  remove(id: string): Promise<void> {
-    return this.personaRepository.remove(id);
+async remove(id: string): Promise<void> {
+  const autos = await this.autoRepository.getAll();
+  const autosDeLaPersona = autos.filter(auto => auto.duenioId === id);
+
+  for (const auto of autosDeLaPersona) {
+    if (auto.id) {
+      await this.autoRepository.remove(auto.id);
+    }
   }
+  await this.personaRepository.remove(id);
+}
+
 
   //Metodos propios
   async browse(): Promise<Partial<Persona>[]> {
